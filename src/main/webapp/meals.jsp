@@ -17,6 +17,7 @@
 <h3><a href="index.html">Home</a></h3>
 <hr>
 <h2>Meals</h2>
+<%--<table style="border: 1px solid black">--%>
 <table border="1">
     <caption>Таблица потребления калорий</caption>
     <tr>
@@ -29,7 +30,7 @@
     <c:forEach var="meal" items="${mealsList}">
         <fmt:parseDate value="${ meal.dateTime }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
         <fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" var = "mealTime"/>
-        <tr>
+        <tr style="color: ${meal.excess ? "red" : "green"}; border: 1px solid black">
             <td>${mealTime}</td>
             <td>${meal.description}</td>
             <td>${meal.calories}</td>
