@@ -40,7 +40,8 @@ public class MealServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         request.setCharacterEncoding("UTF-8");
-        Meal meal = new Meal(
+        int userId = SecurityUtil.authUserId();
+        Meal meal = new Meal(userId,
                 LocalDateTime.parse(request.getParameter("dateTime")),
                 request.getParameter("description"),
                 Integer.parseInt(request.getParameter("calories")));
@@ -56,6 +57,7 @@ public class MealServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
+        int userId = SecurityUtil.authUserId();
 
         switch (action == null ? "all" : action) {
             case "delete":
@@ -66,7 +68,7 @@ public class MealServlet extends HttpServlet {
             case "create":
             case "update":
                 final Meal meal = "create".equals(action) ?
-                        new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000) :
+                        new Meal(userId, LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000) :
                         mealController.get(getId(request));
                 request.setAttribute("meal", meal);
                 request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
